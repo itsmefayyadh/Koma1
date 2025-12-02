@@ -1,0 +1,16 @@
+runtime: nodejs18
+
+env: standard
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 5
+
+env_variables:
+  NODE_ENV: "production"
+
+handlers:
+- url: /.*
+  script: auto
+  secure: always
+  redirect_http_response_code: 301
