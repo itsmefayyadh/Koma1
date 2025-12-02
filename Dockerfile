@@ -3,14 +3,11 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY inventori-project/inventori-frontend/package*.json ./
+# Copy all source code first
+COPY inventori-project/inventori-frontend/ .
 
-# Install dependencies
+# Install dependencies (will now pick up correct package.json)
 RUN npm install
-
-# Copy source code
-COPY inventori-project/inventori-frontend/ ./
 
 # Build the application
 RUN npm run build
