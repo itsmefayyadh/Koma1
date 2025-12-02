@@ -7,7 +7,9 @@ steps:
       - 'gcr.io/$PROJECT_ID/inventori-frontend:latest'
       - '-t'
       - 'gcr.io/$PROJECT_ID/inventori-frontend:$SHORT_SHA'
-      - '.'
+      - '-f'
+      - 'inventori-project/Dockerfile'
+      - 'inventori-project'
 
   # Step 2: Push image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -16,13 +18,18 @@ steps:
       - 'gcr.io/$PROJECT_ID/inventori-frontend'
 
   # Step 3: Deploy to Cloud Run
-  - name: 'gcr.io/cloud-builders/gke-deploy'
+  - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'run'
-      - '--filename=.'
+      - 'deploy'
+      - 'inventori-frontend'
       - '--image=gcr.io/$PROJECT_ID/inventori-frontend:$SHORT_SHA'
-      - '--location=asia-southeast1'
-      - '--output=/workspace/deploy/'
+      - '--region=asia-southeast1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--max-instances=10'
 
 images:
   - 'gcr.io/$PROJECT_ID/inventori-frontend:latest'
